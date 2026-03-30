@@ -21,38 +21,28 @@ export default function StudentFormScreen() {
   };
 
   const handleSubmit = () => {
-    // validação simples
     if (!form.nome || !form.matricula || !form.email) {
       setError("Preencha os campos obrigatórios");
       return;
     }
-
     setError("");
-    console.log("Aluno cadastrado:", form);
+    console.log(form);
   };
 
   return (
     <ScrollView style={{ padding: 20 }}>
-      <TextInput placeholder="Nome" onChangeText={(v) => handleChange("nome", v)} style={inputStyle} />
-      <TextInput placeholder="Matrícula" onChangeText={(v) => handleChange("matricula", v)} style={inputStyle} />
-      <TextInput placeholder="Curso" onChangeText={(v) => handleChange("curso", v)} style={inputStyle} />
-      <TextInput placeholder="Email" onChangeText={(v) => handleChange("email", v)} style={inputStyle} />
-      <TextInput placeholder="Telefone" onChangeText={(v) => handleChange("telefone", v)} style={inputStyle} />
-      <TextInput placeholder="CEP" onChangeText={(v) => handleChange("cep", v)} style={inputStyle} />
-      <TextInput placeholder="Endereço" onChangeText={(v) => handleChange("endereco", v)} style={inputStyle} />
-      <TextInput placeholder="Cidade" onChangeText={(v) => handleChange("cidade", v)} style={inputStyle} />
-      <TextInput placeholder="Estado" onChangeText={(v) => handleChange("estado", v)} style={inputStyle} />
-
+      {Object.keys(form).map((field) => (
+        <TextInput
+          key={field}
+          placeholder={field}
+          onChangeText={(v) => handleChange(field, v)}
+          style={input}
+        />
+      ))}
       {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
-
       <Button title="Cadastrar" onPress={handleSubmit} />
     </ScrollView>
   );
 }
 
-const inputStyle = {
-  borderWidth: 1,
-  marginBottom: 10,
-  padding: 10,
-  borderRadius: 5,
-};
+const input = { borderWidth: 1, marginBottom: 10, padding: 10 };

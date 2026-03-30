@@ -1,42 +1,19 @@
-import { useState, useContext } from "react";
-import { View, TextInput, Button, Text } from "react-native";
-import { AuthContext } from "../context/AuthContext";
+import { createContext, useState } from "react";
 
-export default function LoginScreen() {
-  const { login } = useContext(AuthContext);
+export const AuthContext = createContext({} as any);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+export const AuthProvider = ({ children }: any) => {
+  const [user, setUser] = useState<string | null>(null);
 
-  const handleLogin = () => {
-    if (!email || !password) {
-      setError("Preencha todos os campos");
-      return;
-    }
-
-    setError("");
-    login(email, password);
+  const login = (email: string, password: string) => {
+    if (email && password) setUser(email);
   };
 
+  const logout = () => setUser(null);
+
   return (
-    <View style={{ padding: 20 }}>
-      <TextInput
-        placeholder="Email"
-        onChangeText={setEmail}
-        style={{ borderWidth: 1, marginBottom: 10, padding: 8 }}
-      />
-
-      <TextInput
-        placeholder="Senha"
-        secureTextEntry
-        onChangeText={setPassword}
-        style={{ borderWidth: 1, marginBottom: 10, padding: 8 }}
-      />
-
-      {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
-
-      <Button title="Entrar" onPress={handleLogin} />
-    </View>
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
   );
-}
+};
